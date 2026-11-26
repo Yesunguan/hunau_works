@@ -17,7 +17,11 @@ final class AppCoordinator: NSObject, NSApplicationDelegate {
         NSApp.setActivationPolicy(.accessory)
         installMinimalMainMenu()
 
-        let store = HomeworkStore()
+        let args = ProcessInfo.processInfo.arguments
+        let storePathArg = args.first { $0.hasPrefix("--store-path=") }?.replacingOccurrences(of: "--store-path=", with: "")
+        let persistence = storePathArg.map { PersistenceService(fileURL: URL(fileURLWithPath: $0)) } ?? PersistenceService()
+
+        let store = HomeworkStore(persistence: persistence)
         self.store = store
         self.notificationService = NotificationService()
         self.hotKeyService = GlobalHotKeyService()
@@ -31,7 +35,6 @@ final class AppCoordinator: NSObject, NSApplicationDelegate {
         }
 
         // Optional CLI arguments for automated visual verification
-        let args = ProcessInfo.processInfo.arguments
         let forceFloating = args.contains("--preview-floating")
         let forceClear = args.contains("--preview-clear")
         let forceDark = args.contains("--preview-dark")

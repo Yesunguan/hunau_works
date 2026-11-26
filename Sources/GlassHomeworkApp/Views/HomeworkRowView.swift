@@ -2,8 +2,9 @@ import GlassHomeworkCore
 import SwiftUI
 
 struct HomeworkRowView: View {
-    let item: HomeworkItem
-    let course: Course?
+    @Bindable var store: HomeworkStore
+    let itemId: UUID
+    let fallbackItem: HomeworkItem
     let now: Date
     let isCompact: Bool
     let isSelected: Bool
@@ -13,6 +14,14 @@ struct HomeworkRowView: View {
     let onDelete: () -> Void
 
     @State private var isHovering = false
+
+    private var item: HomeworkItem {
+        store.item(for: itemId) ?? fallbackItem
+    }
+
+    private var course: Course? {
+        store.course(for: item.courseId)
+    }
 
     private var urgency: UrgencyLevel {
         UrgencyCalculator.urgency(for: item, now: now)

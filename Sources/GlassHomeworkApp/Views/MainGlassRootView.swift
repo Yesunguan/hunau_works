@@ -27,10 +27,10 @@ struct MainGlassRootView: View {
     @State private var showSearchBar: Bool = false
 
     var body: some View {
-        TimelineView(.periodic(from: .now, by: 30)) { timeline in
-            let now = timeline.date
-            GeometryReader { geo in
-                let tier = ResponsiveLayoutTier(width: geo.size.width)
+        GeometryReader { geo in
+            let tier = ResponsiveLayoutTier(width: geo.size.width)
+            TimelineView(.periodic(from: .now, by: 30)) { timeline in
+                let now = timeline.date
                 ZStack(alignment: .bottomTrailing) {
                     VStack(spacing: 0) {
                         headerBar(tier: tier, now: now)
@@ -72,24 +72,24 @@ struct MainGlassRootView: View {
                         .padding(6)
                 }
                 .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .sheet(
-                    isPresented: Binding(
-                        get: { sheetDetailItemId != nil && tier != .wide },
-                        set: { presented in
-                            if !presented { sheetDetailItemId = nil }
-                        }
-                    )
-                ) {
-                    if let id = sheetDetailItemId {
-                        HomeworkDetailView(
-                            store: store,
-                            homeworkId: id,
-                            showCloseButton: true
-                        ) {
-                            sheetDetailItemId = nil
-                        }
-                        .frame(minWidth: 360, idealWidth: 420, minHeight: 460, idealHeight: 540)
+            }
+            .sheet(
+                isPresented: Binding(
+                    get: { sheetDetailItemId != nil && tier != .wide },
+                    set: { presented in
+                        if !presented { sheetDetailItemId = nil }
                     }
+                )
+            ) {
+                if let id = sheetDetailItemId {
+                    HomeworkDetailView(
+                        store: store,
+                        homeworkId: id,
+                        showCloseButton: true
+                    ) {
+                        sheetDetailItemId = nil
+                    }
+                    .frame(minWidth: 360, idealWidth: 420, minHeight: 460, idealHeight: 540)
                 }
             }
         }
@@ -537,7 +537,7 @@ struct MainGlassRootView: View {
 
     private func homeworkScrollList(now: Date, isCompact: Bool, opensSheetOnTap: Bool) -> some View {
         ScrollView {
-            LazyVStack(alignment: .leading, spacing: isCompact ? 6 : 8) {
+            VStack(alignment: .leading, spacing: isCompact ? 6 : 8) {
                 if store.showCompletedArchive {
                     let completed = store.filteredCompletedItems
                     if completed.isEmpty {
@@ -595,8 +595,9 @@ struct MainGlassRootView: View {
         opensSheetOnTap: Bool
     ) -> some View {
         HomeworkRowView(
-            item: item,
-            course: store.course(for: item.courseId),
+            store: store,
+            itemId: item.id,
+            fallbackItem: item,
             now: now,
             isCompact: isCompact,
             isSelected: store.selectedItemId == item.id,
