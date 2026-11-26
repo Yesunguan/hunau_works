@@ -1,0 +1,20 @@
+# Swift Package Manager & build artifacts
+.build/
+.build-bundle/
+.swiftpm/
+Packages/
+Package.resolved
+
+# Xcode & IDE files
+*.xcodeproj/
+*.xcworkspace/
+*.xcuserstate
+xcuserdata/
+DerivedData/
+.vscode/
+.idea/
+
+# macOS system files
+.DS_Store
+*.swp
+*~
