@@ -81,5 +81,13 @@ GlassHomework/
 ├── scripts/
 │   ├── generate_icon.swift                    # CoreGraphics 液态玻璃图标生成器
 │   └── build_app.sh                           # Release 构建与 .app 打包安装脚本
-└── docs/images/                               # 实机渲染预览截图
+└── docs/
+    ├── ROADMAP.md                             # 未来多端与功能扩展构想（iPhone / EventKit / Windows）
+    └── images/                                # 实机渲染预览截图
 ```
+
+---
+
+## 未来规划（已记录待定）
+
+关于对接苹果「提醒事项（EventKit）」实现 iPhone 无痛联动、iOS 26（WidgetKit）移植以及 Windows 端方案的技术评估与构想，已整理在 [docs/ROADMAP.md](docs/ROADMAP.md)。
