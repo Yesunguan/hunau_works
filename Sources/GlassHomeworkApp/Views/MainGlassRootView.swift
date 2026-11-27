@@ -1,3 +1,4 @@
+import AppKit
 import GlassHomeworkCore
 import SwiftUI
 
@@ -105,24 +106,11 @@ struct MainGlassRootView: View {
         return HStack(spacing: 8) {
             // App identity & live count
             HStack(spacing: 7) {
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [Color(hex: "#60A5FA"), Color(hex: "#A78BFA")],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: tier == .compact ? 22 : 26, height: tier == .compact ? 22 : 26)
-                    Image(systemName: "checklist")
-                        .font(.system(size: tier == .compact ? 11 : 12.5, weight: .bold))
-                        .foregroundStyle(.white)
-                }
+                appBadgeLogoView(size: tier == .compact ? 24 : 28)
 
                 VStack(alignment: .leading, spacing: 1) {
                     HStack(spacing: 5) {
-                        Text("琉璃作业")
+                        Text("湘农作业")
                             .font(.system(size: tier == .compact ? 13 : 14.5, weight: .bold))
                         Text("\(incomplete)")
                             .font(.system(size: 11, weight: .bold, design: .rounded))
@@ -299,6 +287,43 @@ struct MainGlassRootView: View {
                 }
             }
         }
+    }
+
+    @ViewBuilder
+    private func appBadgeLogoView(size: CGFloat) -> some View {
+        if let badgeImage = Self.loadAppBadgeImage() {
+            Image(nsImage: badgeImage)
+                .resizable()
+                .interpolation(.high)
+                .antialiased(true)
+                .scaledToFit()
+                .frame(width: size, height: size)
+                .clipShape(Circle())
+                .shadow(color: .black.opacity(0.22), radius: 2.5, y: 1)
+        } else {
+            ZStack {
+                Circle()
+                    .fill(
+                        LinearGradient(
+                            colors: [Color(hex: "#60A5FA"), Color(hex: "#A78BFA")],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .frame(width: size, height: size)
+                Image(systemName: "checklist")
+                    .font(.system(size: size * 0.48, weight: .bold))
+                    .foregroundStyle(.white)
+            }
+        }
+    }
+
+    private static func loadAppBadgeImage() -> NSImage? {
+        if let url = Bundle.main.url(forResource: "AppBadge", withExtension: "png"),
+           let img = NSImage(contentsOf: url) {
+            return img
+        }
+        return nil
     }
 
     // MARK: - Course Filter Strip

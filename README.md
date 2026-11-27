@@ -1,7 +1,7 @@
-# 琉璃作业（GlassHomework）
+# 湘农作业（GlassHomework）
 
 <p align="center">
-  <img src="docs/images/app_icon.png" width="110" alt="GlassHomework App Icon" />
+  <img src="docs/images/app_icon.png" width="120" alt="湘农作业 App Icon" />
 </p>
 
 <p align="center">
@@ -55,13 +55,13 @@
 arch -arm64 swift run GlassHomeworkTestRunner
 ```
 
-### 2. 编译打包并安装至 `/Applications/GlassHomework.app`
+### 2. 编译打包并安装至 `/Applications/湘农作业.app`
 
 ```bash
 ./scripts/build_app.sh
 ```
 
-脚本会自动编译 Apple Silicon Release 二进制、生成 `AppIcon.icns`、组装 `.app` Bundle、执行本地签名并安装到 `/Applications/GlassHomework.app`。
+脚本会自动编译 Apple Silicon Release 二进制、生成 `AppIcon.icns`、组装 `.app` Bundle、执行本地签名并安装到 `/Applications/湘农作业.app`。
 
 ---
 
@@ -73,13 +73,14 @@ GlassHomework/
 ├── Sources/
 │   ├── GlassHomeworkCore/                     # 数据模型、紧迫度计算、Store、持久化与提醒排期
 │   └── GlassHomeworkApp/
+│       ├── Resources/                         # 校徽图标资源 AppBadge.png
 │       ├── GlassHomeworkAppMain.swift         # 应用入口与协调器
 │       ├── Services/                          # 系统通知、Carbon 全局快捷键、开机自启
 │       ├── Window/                            # NSGlassEffectView 桌面窗口、快记面板、菜单栏
 │       └── Views/                             # 三段式 SwiftUI 液态玻璃界面与设置面板
 ├── Tests/GlassHomeworkCoreTests/              # 原生自动化测试执行器
 ├── scripts/
-│   ├── generate_icon.swift                    # CoreGraphics 液态玻璃图标生成器
+│   ├── generate_icon.swift                    # 圆形校徽 AppIcon.icns 生成器
 │   └── build_app.sh                           # Release 构建与 .app 打包安装脚本
 └── docs/
     ├── ROADMAP.md                             # 未来多端与功能扩展构想（iPhone / EventKit / Windows）

@@ -21,7 +21,7 @@ struct SettingsPopoverView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             HStack {
-                Text("琉璃作业设置")
+                Text("湘农作业设置")
                     .font(.system(size: 14, weight: .bold))
                 Spacer()
                 Picker("", selection: $activeTab) {
@@ -264,7 +264,7 @@ struct SettingsPopoverView: View {
                 .font(.system(size: 12.5))
 
                 Toggle(
-                    "开机自动启动琉璃作业",
+                    "开机自动启动湘农作业",
                     isOn: Binding(
                         get: { store.settings.launchAtLoginEnabled },
                         set: { enabled in actions.toggleLaunchAtLogin(enabled) }
@@ -395,7 +395,7 @@ struct SettingsPopoverView: View {
     private func exportBackup() {
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.json]
-        panel.nameFieldStringValue = "GlassHomework-Backup.json"
+        panel.nameFieldStringValue = "湘农作业-备份.json"
         panel.prompt = "导出备份"
         if panel.runModal() == .OK, let url = panel.url {
             do {

@@ -29,6 +29,9 @@ final class AppCoordinator: NSObject, NSApplicationDelegate {
 
         // Sync LaunchAtLogin setting with actual disk state
         let actualLaunchState = launchService.isInstalled
+        if actualLaunchState {
+            launchService.syncPathIfInstalled()
+        }
         if store.settings.launchAtLoginEnabled != actualLaunchState {
             store.settings.launchAtLoginEnabled = actualLaunchState
             store.saveSilently()
@@ -164,7 +167,7 @@ final class AppCoordinator: NSObject, NSApplicationDelegate {
 
         let appMenuItem = NSMenuItem()
         let appMenu = NSMenu()
-        appMenu.addItem(withTitle: "退出琉璃作业", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
+        appMenu.addItem(withTitle: "退出湘农作业", action: #selector(NSApplication.terminate(_:)), keyEquivalent: "q")
         appMenuItem.submenu = appMenu
         mainMenu.addItem(appMenuItem)
 

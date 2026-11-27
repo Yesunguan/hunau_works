@@ -22,11 +22,16 @@ final class LaunchAtLoginService {
         }
     }
 
+    func syncPathIfInstalled() {
+        guard isInstalled else { return }
+        try? install()
+    }
+
     private func install() throws {
         let dir = plistURL.deletingLastPathComponent()
         try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
 
-        let installedAppPath = "/Applications/GlassHomework.app"
+        let installedAppPath = "/Applications/湘农作业.app"
         let targetAppPath: String
         if FileManager.default.fileExists(atPath: installedAppPath) {
             targetAppPath = installedAppPath

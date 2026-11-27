@@ -30,6 +30,7 @@ let package = Package(
             name: "GlassHomeworkApp",
             dependencies: ["GlassHomeworkCore"],
             path: "Sources/GlassHomeworkApp",
+            exclude: ["Resources"],
             linkerSettings: [
                 .linkedFramework("AppKit"),
                 .linkedFramework("SwiftUI"),

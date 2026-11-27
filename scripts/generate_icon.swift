@@ -3,13 +3,20 @@ import AppKit
 import CoreGraphics
 import Foundation
 
-guard CommandLine.arguments.count >= 2 else {
-    fputs("Usage: generate_icon.swift <output_iconset_dir>\n", stderr)
+guard CommandLine.arguments.count >= 3 else {
+    fputs("Usage: generate_icon.swift <badge_png_path> <output_iconset_dir>\n", stderr)
     exit(1)
 }
 
-let outputDir = URL(fileURLWithPath: CommandLine.arguments[1], isDirectory: true)
+let badgePath = CommandLine.arguments[1]
+let outputDir = URL(fileURLWithPath: CommandLine.arguments[2], isDirectory: true)
 try FileManager.default.createDirectory(at: outputDir, withIntermediateDirectories: true)
+
+guard let badgeImage = NSImage(contentsOfFile: badgePath),
+      let badgeCG = badgeImage.cgImage(forProposedRect: nil, context: nil, hints: nil) else {
+    fputs("ERROR: Failed to load badge image at \(badgePath)\n", stderr)
+    exit(1)
+}
 
 func renderIcon(pixelSize: Int) -> NSImage {
     let size = NSSize(width: pixelSize, height: pixelSize)
@@ -22,98 +29,32 @@ func renderIcon(pixelSize: Int) -> NSImage {
     }
 
     let s = CGFloat(pixelSize)
-    let inset = s * 0.08
-    let rect = CGRect(x: inset, y: inset, width: s - inset * 2, height: s - inset * 2)
-    let cornerRadius = rect.width * 0.24
-    let squircle = CGPath(roundedRect: rect, cornerWidth: cornerRadius, cornerHeight: cornerRadius, transform: nil)
+    // Standard macOS circular icon scale (~86% of canvas) with soft elevation shadow
+    let diameter = s * 0.86
+    let origin = (s - diameter) / 2.0
+    let targetRect = CGRect(x: origin, y: origin, width: diameter, height: diameter)
+    let circlePath = CGPath(ellipseIn: targetRect, transform: nil)
 
-    // Subtle drop shadow
+    ctx.interpolationQuality = .high
+
+    // Subtle elevation shadow beneath circular crest
     ctx.saveGState()
-    ctx.setShadow(offset: CGSize(width: 0, height: -s * 0.025), blur: s * 0.055, color: NSColor.black.withAlphaComponent(0.32).cgColor)
-    ctx.addPath(squircle)
-    ctx.setFillColor(NSColor(calibratedRed: 0.14, green: 0.28, blue: 0.68, alpha: 1.0).cgColor)
+    ctx.setShadow(
+        offset: CGSize(width: 0, height: -s * 0.016),
+        blur: max(1.0, s * 0.032),
+        color: NSColor.black.withAlphaComponent(0.28).cgColor
+    )
+    ctx.addPath(circlePath)
+    ctx.setFillColor(NSColor.white.cgColor)
     ctx.fillPath()
     ctx.restoreGState()
 
-    // Clip to rounded icon tile
+    // Draw crisp circular badge clipped cleanly
     ctx.saveGState()
-    ctx.addPath(squircle)
+    ctx.addPath(circlePath)
     ctx.clip()
-
-    let colorSpace = CGColorSpaceCreateDeviceRGB()
-
-    // Deep liquid sapphire-violet base gradient
-    let bgColors = [
-        NSColor(calibratedRed: 0.14, green: 0.45, blue: 0.98, alpha: 1.0).cgColor,
-        NSColor(calibratedRed: 0.36, green: 0.30, blue: 0.92, alpha: 1.0).cgColor,
-        NSColor(calibratedRed: 0.09, green: 0.65, blue: 0.85, alpha: 1.0).cgColor
-    ] as CFArray
-    if let grad = CGGradient(colorsSpace: colorSpace, colors: bgColors, locations: [0.0, 0.55, 1.0]) {
-        ctx.drawLinearGradient(
-            grad,
-            start: CGPoint(x: rect.minX, y: rect.maxY),
-            end: CGPoint(x: rect.maxX, y: rect.minY),
-            options: []
-        )
-    }
-
-    // Soft internal luminous orb
-    let glowColors = [
-        NSColor(calibratedRed: 0.65, green: 0.92, blue: 1.0, alpha: 0.65).cgColor,
-        NSColor(calibratedRed: 0.65, green: 0.92, blue: 1.0, alpha: 0.0).cgColor
-    ] as CFArray
-    if let radial = CGGradient(colorsSpace: colorSpace, colors: glowColors, locations: [0.0, 1.0]) {
-        ctx.drawRadialGradient(
-            radial,
-            startCenter: CGPoint(x: rect.minX + rect.width * 0.28, y: rect.maxY - rect.height * 0.22),
-            startRadius: 0,
-            endCenter: CGPoint(x: rect.minX + rect.width * 0.28, y: rect.maxY - rect.height * 0.22),
-            endRadius: rect.width * 0.68,
-            options: []
-        )
-    }
-
-    // Frosted inner floating glass card
-    let cardRect = rect.insetBy(dx: rect.width * 0.14, dy: rect.height * 0.14)
-    let cardPath = CGPath(roundedRect: cardRect, cornerWidth: cardRect.width * 0.22, cornerHeight: cardRect.width * 0.22, transform: nil)
-    ctx.addPath(cardPath)
-    ctx.setFillColor(NSColor.white.withAlphaComponent(0.22).cgColor)
-    ctx.fillPath()
-
-    ctx.addPath(cardPath)
-    ctx.setStrokeColor(NSColor.white.withAlphaComponent(0.62).cgColor)
-    ctx.setLineWidth(max(1.0, s * 0.012))
-    ctx.strokePath()
-
-    // Crisp luminous checkmark inside card
-    let checkPath = CGMutablePath()
-    checkPath.move(to: CGPoint(x: s * 0.34, y: s * 0.50))
-    checkPath.addLine(to: CGPoint(x: s * 0.46, y: s * 0.38))
-    checkPath.addLine(to: CGPoint(x: s * 0.68, y: s * 0.63))
-
-    ctx.saveGState()
-    ctx.setShadow(offset: CGSize(width: 0, height: -s * 0.01), blur: s * 0.035, color: NSColor.black.withAlphaComponent(0.22).cgColor)
-    ctx.addPath(checkPath)
-    ctx.setStrokeColor(NSColor.white.cgColor)
-    ctx.setLineWidth(max(2.0, s * 0.072))
-    ctx.setLineCap(.round)
-    ctx.setLineJoin(.round)
-    ctx.strokePath()
+    ctx.draw(badgeCG, in: targetRect)
     ctx.restoreGState()
-
-    // Top specular glass highlight curve
-    let highlightRect = CGRect(x: rect.minX - rect.width * 0.1, y: rect.midY + rect.height * 0.12, width: rect.width * 1.2, height: rect.height * 0.6)
-    ctx.addEllipse(in: highlightRect)
-    ctx.setFillColor(NSColor.white.withAlphaComponent(0.14).cgColor)
-    ctx.fillPath()
-
-    ctx.restoreGState()
-
-    // Outer specular glass rim
-    ctx.addPath(squircle)
-    ctx.setStrokeColor(NSColor.white.withAlphaComponent(0.55).cgColor)
-    ctx.setLineWidth(max(1.0, s * 0.015))
-    ctx.strokePath()
 
     image.unlockFocus()
     return image
@@ -143,4 +84,4 @@ for entry in sizes {
     try png.write(to: outputDir.appendingPathComponent(entry.name))
 }
 
-print("Generated iconset at \(outputDir.path)")
+print("Generated circular iconset at \(outputDir.path)")

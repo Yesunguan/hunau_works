@@ -113,11 +113,11 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
                 let granted = try await center.requestAuthorization(options: [.alert, .sound])
                 self.refreshAuthorizationStatus()
                 guard granted else {
-                    completion("通知权限未开启，请在「系统设置 → 通知 → 琉璃作业」中允许")
+                    completion("通知权限未开启，请在「系统设置 → 通知 → 湘农作业」中允许")
                     return
                 }
                 let content = UNMutableNotificationContent()
-                content.title = "琉璃作业 · 测试提醒"
+                content.title = "湘农作业 · 测试提醒"
                 content.body = "系统通知已连通！作业临近截止时我会按你的配置准时提醒你。"
                 content.sound = .default
 

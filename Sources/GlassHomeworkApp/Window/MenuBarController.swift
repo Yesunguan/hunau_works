@@ -36,7 +36,7 @@ final class MenuBarController: NSObject {
                 symbolName = "checklist"
             }
 
-            let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: "琉璃作业")
+            let image = NSImage(systemSymbolName: symbolName, accessibilityDescription: "湘农作业")
             image?.isTemplate = true
             button.image = image
             button.imagePosition = .imageLeading
@@ -46,7 +46,7 @@ final class MenuBarController: NSObject {
             } else {
                 button.title = ""
             }
-            button.toolTip = "琉璃作业：\(incomplete) 项待完成（\(overdue) 逾期，\(critical) 项 24h 内到期）"
+            button.toolTip = "湘农作业：\(incomplete) 项待完成（\(overdue) 逾期，\(critical) 项 24h 内到期）"
         }
 
         buildMenu(incomplete: incomplete, overdue: overdue, critical: critical)
@@ -112,7 +112,7 @@ final class MenuBarController: NSObject {
 
         menu.addItem(.separator())
 
-        let quitItem = NSMenuItem(title: "退出琉璃作业", action: #selector(handleQuit), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: "退出湘农作业", action: #selector(handleQuit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(quitItem)
 
