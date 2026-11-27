@@ -2,34 +2,34 @@
 import PackageDescription
 
 let package = Package(
-    name: "GlassHomework",
+    name: "hunau_works",
     defaultLocalization: "zh-Hans",
     platforms: [
         .macOS("26.0")
     ],
     products: [
         .library(
-            name: "GlassHomeworkCore",
-            targets: ["GlassHomeworkCore"]
+            name: "HunauWorksCore",
+            targets: ["HunauWorksCore"]
         ),
         .executable(
-            name: "GlassHomework",
-            targets: ["GlassHomeworkApp"]
+            name: "hunau_works",
+            targets: ["HunauWorksApp"]
         ),
         .executable(
-            name: "GlassHomeworkTestRunner",
-            targets: ["GlassHomeworkTestRunner"]
+            name: "HunauWorksTestRunner",
+            targets: ["HunauWorksTestRunner"]
         )
     ],
     targets: [
         .target(
-            name: "GlassHomeworkCore",
-            path: "Sources/GlassHomeworkCore"
+            name: "HunauWorksCore",
+            path: "Sources/HunauWorksCore"
         ),
         .executableTarget(
-            name: "GlassHomeworkApp",
-            dependencies: ["GlassHomeworkCore"],
-            path: "Sources/GlassHomeworkApp",
+            name: "HunauWorksApp",
+            dependencies: ["HunauWorksCore"],
+            path: "Sources/HunauWorksApp",
             exclude: ["Resources"],
             linkerSettings: [
                 .linkedFramework("AppKit"),
@@ -39,9 +39,9 @@ let package = Package(
             ]
         ),
         .executableTarget(
-            name: "GlassHomeworkTestRunner",
-            dependencies: ["GlassHomeworkCore"],
-            path: "Tests/GlassHomeworkCoreTests"
+            name: "HunauWorksTestRunner",
+            dependencies: ["HunauWorksCore"],
+            path: "Tests/HunauWorksCoreTests"
         )
     ]
 )

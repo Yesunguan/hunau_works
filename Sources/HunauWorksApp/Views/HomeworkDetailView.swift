@@ -1,5 +1,5 @@
 import AppKit
-import GlassHomeworkCore
+import HunauWorksCore
 import SwiftUI
 
 struct HomeworkDetailView: View {

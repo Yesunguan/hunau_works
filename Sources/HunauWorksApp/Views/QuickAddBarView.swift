@@ -1,4 +1,4 @@
-import GlassHomeworkCore
+import HunauWorksCore
 import SwiftUI
 
 struct QuickAddBarView: View {

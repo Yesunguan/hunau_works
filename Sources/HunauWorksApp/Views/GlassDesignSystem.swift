@@ -1,4 +1,4 @@
-import GlassHomeworkCore
+import HunauWorksCore
 import SwiftUI
 
 extension Color {

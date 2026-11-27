@@ -1,5 +1,5 @@
 import Foundation
-import GlassHomeworkCore
+import HunauWorksCore
 
 struct TestFailure: Error, CustomStringConvertible {
     let message: String
@@ -27,14 +27,14 @@ func unwrap<T>(_ value: T?, _ message: String = "unexpected nil", line: Int = #l
 
 func makeTempDir() throws -> URL {
     let dir = FileManager.default.temporaryDirectory
-        .appendingPathComponent("GlassHomeworkTests-\(UUID().uuidString)", isDirectory: true)
+        .appendingPathComponent("HunauWorksTests-\(UUID().uuidString)", isDirectory: true)
     try FileManager.default.createDirectory(at: dir, withIntermediateDirectories: true)
     return dir
 }
 
 @MainActor
 @main
-enum GlassHomeworkTestRunner {
+enum HunauWorksTestRunner {
     static func main() {
         var passed = 0
         var failed = 0
@@ -50,7 +50,7 @@ enum GlassHomeworkTestRunner {
             }
         }
 
-        print("Running GlassHomeworkCore automated test suite...")
+        print("Running HunauWorksCore automated test suite...")
 
         run("紧急度分级与中文倒计时格式") {
             let now = Date(timeIntervalSince1970: 1_800_000_000)

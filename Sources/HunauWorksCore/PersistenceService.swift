@@ -100,14 +100,19 @@ public enum SampleDataFactory {
 
 public struct PersistenceService: Sendable {
     public let fileURL: URL
+    private let legacyFileURL: URL?
 
     public init(fileURL: URL? = nil) {
         if let fileURL {
             self.fileURL = fileURL
+            self.legacyFileURL = nil
         } else {
             let appSupport = FileManager.default.urls(for: .applicationSupportDirectory, in: .userDomainMask).first
                 ?? FileManager.default.homeDirectoryForCurrentUser.appendingPathComponent("Library/Application Support")
             self.fileURL = appSupport
+                .appendingPathComponent("hunau_works", isDirectory: true)
+                .appendingPathComponent("store.json")
+            self.legacyFileURL = appSupport
                 .appendingPathComponent("GlassHomework", isDirectory: true)
                 .appendingPathComponent("store.json")
         }
@@ -136,6 +141,19 @@ public struct PersistenceService: Sendable {
                 let backupURL = fileURL.deletingLastPathComponent()
                     .appendingPathComponent("store.corrupted.\(Int(now.timeIntervalSince1970)).json")
                 try? FileManager.default.copyItem(at: fileURL, to: backupURL)
+            }
+        }
+        if !FileManager.default.fileExists(atPath: fileURL.path),
+           let legacyFileURL,
+           FileManager.default.fileExists(atPath: legacyFileURL.path) {
+            do {
+                let data = try Data(contentsOf: legacyFileURL)
+                let migrated = try decode(data: data)
+                try save(migrated)
+                try? FileManager.default.removeItem(at: legacyFileURL.deletingLastPathComponent())
+                return migrated
+            } catch {
+                // Fall back to default creation if legacy store is unreadable
             }
         }
         let initial = SampleDataFactory.makeInitialDatabase(now: now)

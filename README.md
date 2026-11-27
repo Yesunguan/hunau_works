@@ -1,4 +1,4 @@
-# 湘农作业（GlassHomework）
+# 湘农作业（hunau_works）
 
 <p align="center">
   <img src="docs/images/app_icon.png" width="120" alt="湘农作业 App Icon" />
@@ -40,7 +40,7 @@
   - 基于 `UNUserNotificationCenter` 的截止前本地通知（默认提前 1 天与 2 小时提醒，可自定义节点与免打扰静音）。
 - **全键盘秒记 & 本地持久化备份**
   - 任意应用下按下 `⌥ + Shift + H`（无需辅助功能权限）呼出悬浮快记条，回车即存。
-  - 数据本地保存于 `~/Library/Application Support/GlassHomework/store.json`，支持设置内 JSON 导入导出备份与用户级 `LaunchAgent` 开机自启。
+  - 数据本地保存于 `~/Library/Application Support/hunau_works/store.json`，支持设置内 JSON 导入导出备份与用户级 `LaunchAgent` 开机自启。
 
 ---
 
@@ -52,7 +52,7 @@
 ### 1. 运行核心单元测试
 
 ```bash
-arch -arm64 swift run GlassHomeworkTestRunner
+arch -arm64 swift run HunauWorksTestRunner
 ```
 
 ### 2. 编译打包并安装至 `/Applications/湘农作业.app`
@@ -68,17 +68,17 @@ arch -arm64 swift run GlassHomeworkTestRunner
 ## 目录结构
 
 ```text
-GlassHomework/
+hunau_works/
 ├── Package.swift                              # SwiftPM 工程定义（macOS 26+）
 ├── Sources/
-│   ├── GlassHomeworkCore/                     # 数据模型、紧迫度计算、Store、持久化与提醒排期
-│   └── GlassHomeworkApp/
+│   ├── HunauWorksCore/                        # 数据模型、紧迫度计算、Store、持久化与提醒排期
+│   └── HunauWorksApp/
 │       ├── Resources/                         # 校徽图标资源 AppBadge.png
-│       ├── GlassHomeworkAppMain.swift         # 应用入口与协调器
+│       ├── HunauWorksAppMain.swift            # 应用入口与协调器
 │       ├── Services/                          # 系统通知、Carbon 全局快捷键、开机自启
 │       ├── Window/                            # NSGlassEffectView 桌面窗口、快记面板、菜单栏
 │       └── Views/                             # 三段式 SwiftUI 液态玻璃界面与设置面板
-├── Tests/GlassHomeworkCoreTests/              # 原生自动化测试执行器
+├── Tests/HunauWorksCoreTests/                 # 原生自动化测试执行器
 ├── scripts/
 │   ├── generate_icon.swift                    # 圆形校徽 AppIcon.icns 生成器
 │   └── build_app.sh                           # Release 构建与 .app 打包安装脚本

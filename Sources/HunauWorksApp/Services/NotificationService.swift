@@ -1,5 +1,5 @@
 import Foundation
-import GlassHomeworkCore
+import HunauWorksCore
 @preconcurrency import UserNotifications
 
 @MainActor
@@ -74,7 +74,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
             let existing = await center.pendingNotificationRequests()
             let oldIds = existing
                 .map(\.identifier)
-                .filter { $0.hasPrefix("glasshomework.") }
+                .filter { $0.hasPrefix("hunau_works.") || $0.hasPrefix("glasshomework.") }
             if !oldIds.isEmpty {
                 center.removePendingNotificationRequests(withIdentifiers: oldIds)
             }
@@ -123,7 +123,7 @@ final class NotificationService: NSObject, UNUserNotificationCenterDelegate {
 
                 let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 1.5, repeats: false)
                 let req = UNNotificationRequest(
-                    identifier: "glasshomework.test.\(UUID().uuidString)",
+                    identifier: "hunau_works.test.\(UUID().uuidString)",
                     content: content,
                     trigger: trigger
                 )

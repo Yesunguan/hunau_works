@@ -1,5 +1,5 @@
 import AppKit
-import GlassHomeworkCore
+import HunauWorksCore
 
 @MainActor
 final class MenuBarController: NSObject {

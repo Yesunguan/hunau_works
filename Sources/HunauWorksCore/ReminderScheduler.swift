@@ -59,7 +59,7 @@ public enum ReminderScheduler {
                     ? "距离截止还有 \(leadText)（截止：\(dueStr)）"
                     : "该作业即将截止（\(dueStr)），请检查提交！"
 
-                let id = "glasshomework.\(item.id.uuidString).lead\(lead)"
+                let id = "hunau_works.\(item.id.uuidString).lead\(lead)"
                 requests.append(
                     ReminderRequest(
                         identifier: id,

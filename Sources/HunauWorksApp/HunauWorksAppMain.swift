@@ -1,5 +1,5 @@
 import AppKit
-import GlassHomeworkCore
+import HunauWorksCore
 import SwiftUI
 
 @MainActor
@@ -197,7 +197,7 @@ struct AppActions {
 }
 
 @main
-enum GlassHomeworkEntry {
+enum HunauWorksEntry {
     @MainActor
     static func main() {
         let app = NSApplication.shared

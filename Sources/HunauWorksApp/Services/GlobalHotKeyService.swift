@@ -72,7 +72,7 @@ final class GlobalHotKeyService {
             )
         }
 
-        let signature: OSType = 0x474C4857 // 'GLHW'
+        let signature: OSType = 0x484E574B // 'HNWK'
         let hotKeyID = EventHotKeyID(signature: signature, id: 1)
         RegisterEventHotKey(
             keyCode,

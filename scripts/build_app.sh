@@ -2,14 +2,14 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
-EXEC_NAME="GlassHomework"
+EXEC_NAME="hunau_works"
 DISPLAY_NAME="湘农作业"
-BUNDLE_ID="com.glasshomework.app"
+BUNDLE_ID="com.hunau.works"
 BUILD_DIR="$ROOT_DIR/.build-bundle"
 APP_BUNDLE="$BUILD_DIR/$DISPLAY_NAME.app"
 INSTALL_PATH="/Applications/$DISPLAY_NAME.app"
 LEGACY_INSTALL_PATH="/Applications/GlassHomework.app"
-BADGE_PNG="$ROOT_DIR/Sources/GlassHomeworkApp/Resources/AppBadge.png"
+BADGE_PNG="$ROOT_DIR/Sources/HunauWorksApp/Resources/AppBadge.png"
 
 echo "==> [1/5] Building native Apple Silicon (arm64) release binary..."
 cd "$ROOT_DIR"
@@ -55,9 +55,9 @@ cat > "$APP_BUNDLE/Contents/Info.plist" <<EOF
     <key>CFBundlePackageType</key>
     <string>APPL</string>
     <key>CFBundleShortVersionString</key>
-    <string>1.1.0</string>
+    <string>1.2.0</string>
     <key>CFBundleVersion</key>
-    <string>2</string>
+    <string>3</string>
     <key>LSMinimumSystemVersion</key>
     <string>26.0</string>
     <key>LSUIElement</key>
@@ -75,10 +75,12 @@ codesign --force --deep --sign - "$APP_BUNDLE"
 codesign --verify --deep --strict "$APP_BUNDLE"
 
 echo "==> [5/5] Installing to $INSTALL_PATH..."
-if pgrep -x "$EXEC_NAME" >/dev/null 2>&1; then
-    killall "$EXEC_NAME" || true
-    sleep 0.5
-fi
+for proc in GlassHomework "$EXEC_NAME"; do
+    if pgrep -x "$proc" >/dev/null 2>&1; then
+        killall "$proc" || true
+        sleep 0.5
+    fi
+done
 rm -rf "$LEGACY_INSTALL_PATH" "$INSTALL_PATH"
 cp -R "$APP_BUNDLE" "$INSTALL_PATH"
 codesign --verify --deep --strict "$INSTALL_PATH"

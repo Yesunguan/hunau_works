@@ -1,5 +1,5 @@
 import AppKit
-import GlassHomeworkCore
+import HunauWorksCore
 import SwiftUI
 import UniformTypeIdentifiers
 
@@ -366,7 +366,7 @@ struct SettingsPopoverView: View {
                 }
                 .font(.system(size: 12))
 
-                Text("数据路径：~/Library/Application Support/GlassHomework/store.json")
+                Text("数据路径：~/Library/Application Support/hunau_works/store.json")
                     .font(.system(size: 10))
                     .foregroundStyle(.tertiary)
                     .textSelection(.enabled)

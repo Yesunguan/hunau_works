@@ -1,4 +1,4 @@
-# 琉璃作业（GlassHomework）未来规划与多端构想
+# 湘农作业（hunau_works）未来规划与多端构想
 
 > 状态：已记录搁置，待后续有需要时推进。
 
@@ -9,7 +9,7 @@
 - **核心动机**：在不安装完整 Xcode、不额外维护 iOS App 证书与 7 天续签的前提下，让 iPhone 也能随时查看与提醒未完成作业。
 - **实现思路**：
   1. 在 Mac 端引入系统 `EventKit` 框架（仅需 Command Line Tools 即可继续编译打包）。
-  2. 在「琉璃作业」设置中增加「同步到 Apple 提醒事项」开关，指定同步列表（如「琉璃作业」）。
+  2. 在「湘农作业」设置中增加「同步到 Apple 提醒事项」开关，指定同步列表（如「湘农作业」）。
   3. 当作业新增、修改截止时间、勾选完成或删除时，双向或单向同步至该 `EKCalendar` 列表。
   4. 借助 Apple ID 自带的 iCloud 同步，iPhone 上无需安装任何第三方应用，直接使用系统自带 **「提醒事项」桌面小组件、锁屏组件与系统通知** 接收提醒。
 
@@ -18,7 +18,7 @@
 ## 2. iPhone（iOS 26）原生独立版本移植构想
 
 - **代码复用率**：
-  - `GlassHomeworkCore`（数据模型、紧急度分级与倒计时算法、提醒排期、Store、JSON 备份结构）可直接作为跨平台 Swift Package 复用，无需重写核心业务逻辑。
+  - `HunauWorksCore`（数据模型、紧急度分级与倒计时算法、提醒排期、Store、JSON 备份结构）可直接作为跨平台 Swift Package 复用，无需重写核心业务逻辑。
   - iOS 26 与 macOS 26 共用 SwiftUI 原生液态玻璃 API（`GlassEffectContainer`、`.glassEffect()`、`glassEffectID` 等）及 `UNUserNotificationCenter`。
 - **主要改造点**：
   - 替换 macOS 专属 `AppKit` / `Carbon` / `LaunchAgents` 层，改为 iOS `NavigationStack` / `TabView` 页面交互。
